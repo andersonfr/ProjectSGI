@@ -1,6 +1,6 @@
 #include "../include/rectangle.h"
 
-Rectangle::Rectangle()
+Rectangle::Rectangle() : Rectangle(0.0f, 0.0f, 0.0f, 0.0f)
 {
 }
 

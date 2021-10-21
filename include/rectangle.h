@@ -5,6 +5,7 @@ class Rectangle
     public:
         Rectangle();
         Rectangle(float x, float y, float width, float height);
+        Rectangle(const Rectangle& other) = default;
         ~Rectangle() = default;
     public:
         bool Intersects(const Rectangle& other);
