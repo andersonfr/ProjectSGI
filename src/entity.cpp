@@ -1,12 +1,14 @@
-#include "../include/entity.h"
-#include "../include/component.h"
+#include <entity.h>
+#include <component.h>
 
 Entity::Entity()
 {
+    m_id = 0;
 }
 
 Entity::Entity(const Rectangle& rect)
 {
+    m_id = 0;
     m_rectangle = rect;
 }
 
@@ -34,4 +36,14 @@ Entity & Entity::operator=(const Entity& other)
         m_components.push_back(std::move(comp));
     }
     return *this;
+}
+
+void Entity::Display()
+{
+    std::cout << "Entity pos (" << m_rectangle.m_x << ","<<m_rectangle.m_y << ")" << std::endl;
+
+    for(const auto& cp : GetComponents())
+    {
+        cp->Display();
+    }
 }

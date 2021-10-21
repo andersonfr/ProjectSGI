@@ -9,7 +9,8 @@ class Rectangle
         ~Rectangle() = default;
     public:
         bool Intersects(const Rectangle& other);
-
+        bool Contains(const Rectangle& other);
+        bool Contains(float x, float y);
     public:
         float m_x;
         float m_y;
