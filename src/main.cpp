@@ -90,20 +90,20 @@ int main(int argc, const char* argv[])
     file.close();
     const auto start = std::chrono::high_resolution_clock::now();
    
-    Quadtree qt { QUAD_CAP, Rectangle(QUAD_BOUND_X, QUAD_BOUND_Y, 2 * 1000.0f, 2 * 1000.0f)};
+    Quadtree qt { QUAD_CAP, Rectangle(QUAD_BOUND_X, QUAD_BOUND_Y, 5 * 1000.0f, 5 * 1000.0f)};
+    
     for(auto & e : entities)
     {
         qt.Insert(e.get());
     }
 
     int collisionCount = 0;
-
     for( auto& e : entities)
     {
         auto ents =  qt.Search(e->m_rectangle);
         for(auto& p : ents)
         {
-            if(p != e.get() && e->m_rectangle.Contains(p->m_rectangle.m_x, p->m_rectangle.m_y))
+            if(p != e.get() && e->m_rectangle.Intersects(p->m_rectangle))
             {
                 if(e->m_intersecteds.insert(p->m_id).second)
                 {

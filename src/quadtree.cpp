@@ -19,7 +19,7 @@ Quadtree::~Quadtree()
 
 bool Quadtree::Insert(Entity* entity)
 {
-    if(!m_boundary.Contains(entity->m_rectangle.m_x, entity->m_rectangle.m_y))
+    if(!m_boundary.Intersects(entity->m_rectangle))
         return false;
 
     if (m_entities.size() < m_capacity && !m_isDivided)
@@ -31,10 +31,12 @@ bool Quadtree::Insert(Entity* entity)
     if (!m_isDivided)
         Subdivide();
     
-    return m_ne->Insert(entity) ||
-        m_nw->Insert(entity) ||
-        m_se->Insert(entity) ||
-        m_sw->Insert(entity);
+    if (m_ne->Insert(entity)) return true;
+    if (m_nw->Insert(entity)) return true;
+    if (m_se->Insert(entity)) return true;
+    if (m_sw->Insert(entity)) return true;
+
+    return false;
 }
 
 std::vector<Entity*> Quadtree::Search(Rectangle range)
@@ -46,20 +48,20 @@ std::vector<Entity*> Quadtree::Search(Rectangle range)
     
     for(const auto& e : m_entities)
     {
-        if(range.Contains(e->m_rectangle.m_x, e->m_rectangle.m_y))
+        if(range.Intersects(e->m_rectangle))
             result.push_back(e);
     }
 
     if(m_isDivided)
     {
-        auto nw = m_nw->Search(range);
-        result.insert(result.end(), nw.begin() , nw.end());
         auto ne = m_ne->Search(range);
-        result.insert(result.end(), ne.begin(), ne.end());
-        auto sw = m_sw->Search(range);
-        result.insert(result.end(), sw.begin(), sw.end());
+        result.insert(result.end(), ne.begin() , ne.end());
+        auto nw = m_nw->Search(range);
+        result.insert(result.end(), nw.begin(), nw.end());
         auto se = m_se->Search(range);
         result.insert(result.end(), se.begin(), se.end());
+        auto sw = m_sw->Search(range);
+        result.insert(result.end(), sw.begin(), sw.end());
     }
     
     return result;
